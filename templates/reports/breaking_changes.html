@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Breaking Changes</h2>
+<p>Includes any change disrupting access to vCenter or vSphere hosts, and management-network-impacting changes.</p>
+
+<table>
+  <tr><th>Category</th><th>Setting</th><th>Baseline</th><th>Measured</th><th>Reason</th><th>Mgmt Network?</th></tr>
+  {% for f in findings %}
+  <tr>
+    <td>{{ f.category.value }}</td>
+    <td>{{ f.setting_key }}</td>
+    <td>{{ f.baseline_value }}</td>
+    <td>{{ f.measured_value }}</td>
+    <td>{{ f.breaking_reason }}</td>
+    <td>{% if f.impacts_management_network %}<span class="badge badge-mgmt">Yes</span>{% else %}No{% endif %}</td>
+  </tr>
+  {% else %}
+  <tr><td colspan="6">No breaking changes detected.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

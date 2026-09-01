@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Remediation History</h2>
+
+<table>
+  <tr>
+    <th>Category</th><th>Setting</th><th>Baseline</th><th>Measured (at detection)</th>
+    <th>Status</th><th>First Detected</th><th>Resolved At</th>
+  </tr>
+  {% for f in findings %}
+  <tr>
+    <td>{{ f.category.value }}</td>
+    <td>{{ f.setting_key }}</td>
+    <td>{{ f.baseline_value }}</td>
+    <td>{{ f.measured_value }}</td>
+    <td><span class="badge badge-{{ 'open' if f.status.value == 'open' else 'resolved' }}">{{ f.status.value }}</span></td>
+    <td>{{ f.first_detected_at }}</td>
+    <td>{{ f.resolved_at or "-" }}</td>
+  </tr>
+  {% else %}
+  <tr><td colspan="7">No history available yet.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

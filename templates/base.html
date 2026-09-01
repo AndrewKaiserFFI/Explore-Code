@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>VCF Config Drift Comparison</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f4f5f7; }
+    nav { background: #1b2a4a; padding: 12px 20px; }
+    nav a { color: #fff; margin-right: 16px; text-decoration: none; }
+    .container { padding: 20px; max-width: 1100px; margin: auto; }
+    table { border-collapse: collapse; width: 100%; background: #fff; margin-top: 12px; }
+    th, td { border: 1px solid #ddd; padding: 8px; font-size: 14px; text-align: left; }
+    th { background: #eef1f7; }
+    .badge { padding: 2px 8px; border-radius: 4px; font-size: 12px; color: #fff; }
+    .badge-breaking { background: #c0392b; }
+    .badge-outage { background: #d68910; }
+    .badge-mgmt { background: #6c3483; }
+    .badge-open { background: #b03a2e; }
+    .badge-resolved { background: #1e8449; }
+    .flash { padding: 10px; margin-bottom: 10px; border-radius: 4px; }
+    .flash-success { background: #d4efdf; }
+    .flash-danger { background: #fadbd8; }
+    .flash-info { background: #d6eaf8; }
+    .card { background: #fff; padding: 16px; border-radius: 6px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    form.inline { display: inline; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="{{ url_for('reports.dashboard') }}">Dashboard</a>
+    <a href="{{ url_for('reports.drift_list') }}">Drift Detail</a>
+    <a href="{{ url_for('reports.remediation_plan') }}">Remediation Plan</a>
+    <a href="{{ url_for('reports.breaking_changes') }}">Breaking Changes</a>
+    <a href="{{ url_for('reports.remediation_history') }}">Remediation History</a>
+    <a href="{{ url_for('backup.list_backups') }}">Backups</a>
+    {% if current_user.is_authenticated %}
+      <a href="{{ url_for('auth.logout') }}" style="float:right;">Log out ({{ current_user.username }})</a>
+    {% endif %}
+  </nav>
+  <div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>

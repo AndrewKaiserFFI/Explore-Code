@@ -1,0 +1,21 @@
+[Unit]
+Description=VCF Config Drift Comparison Web App
+After=network.target postgresql.service
+Requires=postgresql.service
+
+[Service]
+Type=simple
+User=vcfdrift
+Group=vcfdrift
+WorkingDirectory=/opt/vcf-drift-app
+EnvironmentFile=/opt/vcf-drift-app/.env
+ExecStart=/opt/vcf-drift-app/venv/bin/gunicorn --workers 3 --bind 127.0.0.1:8000 --timeout 120 app:app
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

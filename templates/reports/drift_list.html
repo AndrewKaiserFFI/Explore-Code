@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Detailed Drift List</h2>
+
+<form method="GET">
+  <label>Category:</label>
+  <select name="category" onchange="this.form.submit()">
+    <option value="">All</option>
+    {% for cat in categories %}
+      <option value="{{ cat }}" {% if cat == selected_category %}selected{% endif %}>{{ cat }}</option>
+    {% endfor %}
+  </select>
+</form>
+
+<table>
+  <tr>
+    <th>Category</th><th>Setting</th><th>Baseline Value</th><th>Measured Value</th>
+    <th>Status</th><th>Flags</th>
+  </tr>
+  {% for f in findings %}
+  <tr>
+    <td>{{ f.category.value }}</td>
+    <td>{{ f.setting_key }}</td>
+    <td>{{ f.baseline_value }}</td>
+    <td>{{ f.measured_value }}</td>
+    <td><span class="badge badge-{{ 'open' if f.status.value == 'open' else 'resolved' }}">{{ f.status.value }}</span></td>
+    <td>
+      {% if f.is_breaking_change %}<span class="badge badge-breaking">breaking</span>{% endif %}
+      {% if f.requires_outage %}<span class="badge badge-outage">outage</span>{% endif %}
+      {% if f.impacts_management_network %}<span class="badge badge-mgmt">mgmt-net</span>{% endif %}
+    </td>
+  </tr>
+  {% else %}
+  <tr><td colspan="6">No drift findings to display.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Remediation Plan</h2>
+
+<div class="card">
+  <h3>Requires Scheduled Outage Window ({{ outage_required|length }})</h3>
+  <table>
+    <tr><th>Category</th><th>Setting</th><th>Baseline</th><th>Measured</th><th>Breaking?</th></tr>
+    {% for f in outage_required %}
+    <tr>
+      <td>{{ f.category.value }}</td><td>{{ f.setting_key }}</td>
+      <td>{{ f.baseline_value }}</td><td>{{ f.measured_value }}</td>
+      <td>{{ "Yes" if f.is_breaking_change else "No" }}</td>
+    </tr>
+    {% else %}<tr><td colspan="5">None.</td></tr>{% endfor %}
+  </table>
+</div>
+
+<div class="card">
+  <h3>Can Be Remediated Live ({{ live_remediable|length }})</h3>
+  <table>
+    <tr><th>Category</th><th>Setting</th><th>Baseline</th><th>Measured</th></tr>
+    {% for f in live_remediable %}
+    <tr>
+      <td>{{ f.category.value }}</td><td>{{ f.setting_key }}</td>
+      <td>{{ f.baseline_value }}</td><td>{{ f.measured_value }}</td>
+    </tr>
+    {% else %}<tr><td colspan="4">None.</td></tr>{% endfor %}
+  </table>
+</div>
+{% endblock %}

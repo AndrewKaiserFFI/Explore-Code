@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Database Backups</h2>
+
+<form method="POST" action="{{ url_for('backup.run_backup') }}">
+  <button type="submit">Run Backup Now</button>
+</form>
+
+<table>
+  <tr><th>Backup File</th><th></th></tr>
+  {% for f in files %}
+  <tr>
+    <td>{{ f }}</td>
+    <td><a href="{{ url_for('backup.download_backup', filename=f) }}">Download</a></td>
+  </tr>
+  {% else %}
+  <tr><td colspan="2">No backups yet.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

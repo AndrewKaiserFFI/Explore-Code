@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Drift Comparison Dashboard</h2>
+
+{% if version_alert %}
+  <div class="card" style="border-left: 5px solid #c0392b;">
+    <strong>Warning - Version Mismatch:</strong> {{ version_alert }}
+  </div>
+{% endif %}
+
+<div class="card">
+  <h3>Environments</h3>
+  <p><strong>Baseline:</strong>
+    {% if baseline %}{{ baseline.environment_name }} (captured {{ baseline.captured_at }}){% else %}Not captured yet{% endif %}
+  </p>
+  <p><strong>Measured:</strong>
+    {% if measured %}{{ measured.environment_name }} (captured {{ measured.captured_at }}, source: {{ measured.source }}){% else %}Not ingested yet{% endif %}
+  </p>
+
+  {% if current_user.is_admin() %}
+  <form class="inline" method="POST" action="{{ url_for('reports.capture_baseline') }}">
+    <button type="submit">Capture Baseline Now (Live API)</button>
+  </form>
+  <form class="inline" method="POST" action="{{ url_for('reports.sync_measured') }}">
+    <button type="submit">Sync Measured Export from Git</button>
+  </form>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h3>Summary</h3>
+  <ul>
+    <li>Total drift findings: {{ summary.total }}</li>
+    <li>Open findings: {{ summary.open }}</li>
+    <li>Breaking changes: {{ summary.breaking }}</li>
+    <li>Requires outage window: {{ summary.requires_outage }}</li>
+  </ul>
+</div>
+{% endblock %}
